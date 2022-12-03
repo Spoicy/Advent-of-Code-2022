@@ -6,39 +6,14 @@ import org.apache.logging.log4j.Logger;
 public final class Match {
 
     public static final int MOVE_OFFSET_TO_OPP = 23;
-    public static final int MOVE_OFFSET_TO_RESULT = 32;
-    public static final int MOVE_OFFSET_TYPECAST = 55 + MOVE_OFFSET_TO_OPP;
+    public static final int MOVE_OFFSET_TO_RESULT = 87;
     private final char oppMove;
     private final char selfMove;
     private static final Logger LOG =
             LogManager.getLogger(Match.class);
-    public Match(final char oppMove, final char moveOrState, final Mode mode) {
+    private Match(final char oppMove, final char selfMove) {
         this.oppMove = oppMove;
-        if (mode.equals(Mode.MOVES)) {
-            this.selfMove = moveOrState;
-            return;
-        }
-        switch (moveOrState) {
-            case 'X':
-                if (oppMove > 'A') {
-                    this.selfMove = (char) (Character.getNumericValue(oppMove) + MOVE_OFFSET_TYPECAST - 1);
-                } else {
-                    this.selfMove = (char) (Character.getNumericValue(oppMove) + MOVE_OFFSET_TYPECAST + 2);
-                }
-                break;
-            case 'Y':
-                this.selfMove = (char) (Character.getNumericValue(oppMove) + MOVE_OFFSET_TYPECAST);
-                break;
-            case 'Z':
-                if (oppMove < 'C') {
-                    this.selfMove = (char) (Character.getNumericValue(oppMove) + MOVE_OFFSET_TYPECAST + 1);
-                } else {
-                    this.selfMove = (char) (Character.getNumericValue(oppMove) + MOVE_OFFSET_TYPECAST - 2);
-                }
-                break;
-            default:
-                throw new RuntimeException("State is unknown and could not be set.");
-        }
+        this.selfMove = selfMove;
     }
 
     public char getOppMove() {
@@ -50,8 +25,8 @@ public final class Match {
     }
 
     public int getMatchValue() {
-        int result = Character.getNumericValue(selfMove) - Character.getNumericValue(oppMove) - MOVE_OFFSET_TO_OPP;
-        int moveValue = Character.getNumericValue(selfMove) - MOVE_OFFSET_TO_RESULT;
+        int result = selfMove - oppMove - MOVE_OFFSET_TO_OPP;
+        int moveValue = selfMove - MOVE_OFFSET_TO_RESULT;
         switch (result) {
             case 0:
                 return moveValue + 3;
@@ -64,5 +39,35 @@ public final class Match {
             default:
                 throw new RuntimeException("Match value not accounted for.");
         }
+    }
+
+    public static Match createWithMove(final char oppMove, final char selfMove) {
+        return new Match(oppMove, selfMove);
+    }
+
+    public static Match createWithState(final char oppMove, final char state) {
+        char selfMove;
+        switch (state) {
+            case 'X':
+                if (oppMove > 'A') {
+                    selfMove = (char) (oppMove + MOVE_OFFSET_TO_OPP - 1);
+                } else {
+                    selfMove = (char) (oppMove + MOVE_OFFSET_TO_OPP + 2);
+                }
+                break;
+            case 'Y':
+                selfMove = (char) (oppMove + MOVE_OFFSET_TO_OPP);
+                break;
+            case 'Z':
+                if (oppMove < 'C') {
+                    selfMove = (char) (oppMove + MOVE_OFFSET_TO_OPP + 1);
+                } else {
+                    selfMove = (char) (oppMove + MOVE_OFFSET_TO_OPP - 2);
+                }
+                break;
+            default:
+                throw new RuntimeException("State is unknown and could not be set.");
+        }
+        return new Match(oppMove, selfMove);
     }
 }

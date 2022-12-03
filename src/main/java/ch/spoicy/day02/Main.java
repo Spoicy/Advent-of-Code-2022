@@ -34,7 +34,11 @@ public class Main {
             reader = new BufferedReader(new FileReader("E:\\aoc2022inputs\\day02.txt"));
             String line = reader.readLine();
             while (line != null) {
-                matchList.add(new Match(line.charAt(0), line.charAt(2), mode));
+                if (mode == Mode.MOVES) {
+                    matchList.add(Match.createWithMove(line.charAt(0), line.charAt(2)));
+                } else {
+                    matchList.add(Match.createWithState(line.charAt(0), line.charAt(2)));
+                }
                 // read next line
                 line = reader.readLine();
             }
