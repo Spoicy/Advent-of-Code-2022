@@ -1,8 +1,5 @@
 package ch.spoicy.day03;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,9 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
-
-    private static final Logger LOG =
-            LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
         BufferedReader reader;
