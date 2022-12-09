@@ -26,12 +26,9 @@ public class Main {
             if (evt.getType().equals(NodeEventType.SUM)) {
                 sum += evt.getValue();
             } else if (evt.getType().equals(NodeEventType.CLOSEST)) {
-                if (evt.getValue() < necessaryRemoved) {
+                if (evt.getValue() < necessaryRemoved || closest == 0) {
                     return;
                 }
-                System.out.println("HEY!!!!!! " + evt.getValue() + " " + (closest - necessaryRemoved > evt.getValue() - necessaryRemoved)
-                    + " " + (evt.getValue() >= necessaryRemoved));
-                System.out.println((closest - necessaryRemoved) + " " + (evt.getValue() - necessaryRemoved));
                 if (closest - necessaryRemoved > evt.getValue() - necessaryRemoved && evt.getValue() >= necessaryRemoved) {
                     closest = evt.getValue();
                 }
